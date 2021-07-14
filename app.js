@@ -14,9 +14,13 @@ var flash = require("connect-flash");
 var ejs = require("ejs");
 
 var dbConnect = require("./config/database");
+// dbConnect(
+//   process.env.MONGOLAB_URI ||
+//     "mongodb://mxgldz:mxgldz@ds151941.mlab.com:51941/d3mindmap"
+// );
 dbConnect(
   process.env.MONGOLAB_URI ||
-    "mongodb://mxgldz:mxgldz@ds151941.mlab.com:51941/d3mindmap"
+    "mongodb+srv://SaiSarath:Sarath01@cluster0.4voye.mongodb.net/mindmap?retryWrites=true&w=majority"
 );
 // dbConnect(process.env.MONGOLAB_URI || 'mongodb://localhost:27017/MindMap');
 
@@ -40,13 +44,13 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 app.use(express.static(path.join(__dirname, "public")));
-// app.use(function (req, res, next) {
-//   if (req.isAuthenticated() || req.url == "/login" || req.url == "/signup") {
-//     return next();
-//   } else {
-//     res.redirect("/login");
-//   }
-// });
+app.use(function (req, res, next) {
+  if (req.isAuthenticated() || req.url == "/login" || req.url == "/signup") {
+    return next();
+  } else {
+    res.redirect("/login");
+  }
+});
 app.use(app.router);
 
 if ("development" == app.get("env")) {
@@ -78,3 +82,6 @@ app.delete("/projects/:id", projects.deleteById);
 http.createServer(app).listen(app.get("port"), function () {
   console.log("Express server listening on port " + app.get("port"));
 });
+
+
+// user creds: email: mindmap@mailinator.com password: MindMap@123 name: Mind Map
